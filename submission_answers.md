@@ -1,0 +1,2 @@
+## Algorithm I implemented
+I ended up going with the `Fisher-Yates Shuffle` algorithm as it's relatively simple to understand. I have an intuition of how it works in that it always guarantees a non-repeating 4 digit sequence, and I can easily explain it to someone non-technical. I also appreciate that every digit between 0 and 9 has an equal change to be selected!

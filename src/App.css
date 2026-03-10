@@ -1,0 +1,397 @@
+/* ── Game Container ── */
+#root {
+  width: min(580px, 100%);
+  margin: 0 auto;
+  padding: clamp(0.75rem, 3vw, 2rem);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.game {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1rem, 3.5vw, 2rem);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.04),
+    0 8px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Title ── */
+.game h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--accent), #e0f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.04em;
+}
+
+/* ── Rules ── */
+.rules {
+  text-align: left;
+  color: var(--text-muted);
+  font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  line-height: 1.7;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  border-left: 2px solid rgba(34, 211, 238, 0.3);
+  padding-left: 1rem;
+}
+
+.rules strong {
+  color: var(--text);
+}
+
+/* ── Form ── */
+.guess-form {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.guess-form input {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  padding: 0.6rem 0.75rem;
+  width: 11rem;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: #fff;
+  letter-spacing: 0.3em;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.guess-form input::placeholder {
+  letter-spacing: 0.02em;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.guess-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.guess-form button {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.guess-form button:hover {
+  background: rgba(34, 211, 238, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.2);
+}
+
+/* ── Error ── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%  { transform: translateX(-6px); }
+  40%  { transform: translateX(6px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+}
+
+.error {
+  color: var(--red);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  animation: shake 0.4s ease;
+}
+
+/* ── History Scroll Container ── */
+.history-scroll {
+  max-height: clamp(180px, 35vh, 400px);
+  overflow-y: auto;
+  margin: 0.75rem 0;
+  border-radius: var(--radius);
+  position: relative;
+
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 12px,
+    black calc(100% - 4px),
+    black 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 12px,
+    black calc(100% - 4px),
+    black 100%
+  );
+}
+
+.history-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.history-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.history-scroll::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.2);
+  border-radius: 4px;
+}
+
+.history-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.4);
+}
+
+.history-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.2) transparent;
+}
+
+/* ── History Table ── */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.history {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+}
+
+.history thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.history th {
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+  letter-spacing: 0.1em;
+  padding: 0.3rem clamp(0.4rem, 2vw, 1rem);
+  background: var(--bg-secondary);
+}
+
+.history td {
+  padding: 0.65rem clamp(0.4rem, 2vw, 1rem);
+  background: var(--surface);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.history td:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+  color: var(--text-muted);
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+}
+
+.history td:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.history tbody tr {
+  animation: slideIn 0.3s ease;
+}
+
+.history tbody tr:last-child td {
+  background: var(--accent-dim);
+}
+
+/* ── Firme / Pico Cells ── */
+.firme-cell {
+  color: var(--green);
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--green-glow);
+}
+
+.firme-cell.zero {
+  color: rgba(255, 255, 255, 0.15);
+  font-weight: 400;
+  text-shadow: none;
+}
+
+.pico-cell {
+  color: var(--orange);
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--orange-glow);
+}
+
+.pico-cell.zero {
+  color: rgba(255, 255, 255, 0.15);
+  font-weight: 400;
+  text-shadow: none;
+}
+
+/* ── Win Message ── */
+@keyframes popIn {
+  0%  { opacity: 0; transform: scale(0.85); }
+  60% { transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.win-message {
+  margin-top: 1.5rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(34, 211, 238, 0.06));
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  animation: popIn 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.win-message::before,
+.win-message::after {
+  position: absolute;
+  font-size: 1.8rem;
+  opacity: 0.25;
+}
+
+.win-message::before {
+  content: '🎉';
+  top: 10px;
+  left: 14px;
+}
+
+.win-message::after {
+  content: '🏆';
+  bottom: 10px;
+  right: 14px;
+}
+
+.win-message p {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.win-message button {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.55rem 1.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--green);
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--green);
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.win-message button:hover {
+  background: rgba(52, 211, 153, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--green-glow);
+}
+
+/* ── Confetti ── */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.confetti-wrapper span {
+  position: absolute;
+  top: -20px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: confettiFall 3s ease-in forwards;
+}
+
+.confetti-wrapper span:nth-child(1)  { left: 5%;  background: var(--accent);  animation-delay: 0s;    animation-duration: 2.8s; }
+.confetti-wrapper span:nth-child(2)  { left: 10%; background: var(--green);   animation-delay: 0.1s;  animation-duration: 3.2s; }
+.confetti-wrapper span:nth-child(3)  { left: 15%; background: var(--orange);  animation-delay: 0.2s;  animation-duration: 2.6s; }
+.confetti-wrapper span:nth-child(4)  { left: 20%; background: #e0f2fe;        animation-delay: 0.05s; animation-duration: 3s; }
+.confetti-wrapper span:nth-child(5)  { left: 25%; background: var(--accent);  animation-delay: 0.3s;  animation-duration: 2.9s; }
+.confetti-wrapper span:nth-child(6)  { left: 32%; background: var(--green);   animation-delay: 0.15s; animation-duration: 3.1s; }
+.confetti-wrapper span:nth-child(7)  { left: 38%; background: var(--orange);  animation-delay: 0.35s; animation-duration: 2.7s; }
+.confetti-wrapper span:nth-child(8)  { left: 43%; background: #e0f2fe;        animation-delay: 0.08s; animation-duration: 3.3s; }
+.confetti-wrapper span:nth-child(9)  { left: 50%; background: var(--accent);  animation-delay: 0.25s; animation-duration: 2.5s; }
+.confetti-wrapper span:nth-child(10) { left: 55%; background: var(--green);   animation-delay: 0.4s;  animation-duration: 3s; }
+.confetti-wrapper span:nth-child(11) { left: 60%; background: var(--orange);  animation-delay: 0.12s; animation-duration: 2.8s; }
+.confetti-wrapper span:nth-child(12) { left: 65%; background: #e0f2fe;        animation-delay: 0.28s; animation-duration: 3.2s; }
+.confetti-wrapper span:nth-child(13) { left: 70%; background: var(--accent);  animation-delay: 0.02s; animation-duration: 2.6s; }
+.confetti-wrapper span:nth-child(14) { left: 75%; background: var(--green);   animation-delay: 0.32s; animation-duration: 3.1s; }
+.confetti-wrapper span:nth-child(15) { left: 80%; background: var(--orange);  animation-delay: 0.18s; animation-duration: 2.9s; }
+.confetti-wrapper span:nth-child(16) { left: 84%; background: var(--accent);  animation-delay: 0.38s; animation-duration: 3s; }
+.confetti-wrapper span:nth-child(17) { left: 88%; background: #e0f2fe;        animation-delay: 0.06s; animation-duration: 2.7s; }
+.confetti-wrapper span:nth-child(18) { left: 91%; background: var(--green);   animation-delay: 0.22s; animation-duration: 3.3s; }
+.confetti-wrapper span:nth-child(19) { left: 94%; background: var(--orange);  animation-delay: 0.42s; animation-duration: 2.5s; }
+.confetti-wrapper span:nth-child(20) { left: 97%; background: var(--accent);  animation-delay: 0.14s; animation-duration: 3.2s; }
+
+/* ── Small phones (≤ 380px) ── */
+@media (max-width: 380px) {
+  .guess-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .guess-form input,
+  .guess-form button {
+    width: 100%;
+  }
+}
+
+/* ── Landscape mobile — shorter scroll area ── */
+@media (max-height: 500px) {
+  .history-scroll {
+    max-height: 25vh;
+  }
+
+  .rules {
+    margin-bottom: 0.75rem;
+  }
+
+  .game h1 {
+    margin-bottom: 0.25rem;
+  }
+}
